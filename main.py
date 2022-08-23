@@ -1,4 +1,3 @@
-from datetime import date, datetime
 import re
 from wechatpy import WeChatClient
 from wechatpy.client.api import WeChatMessage, WeChatTemplate
@@ -15,17 +14,18 @@ app_id = 'wx892de2a69a031f02'
 app_secret = '3b372768c55f6093b5366181e6abcf89'
 
 user_id = 'oBgGw6uckKo_zoqdYGD0BoN6jQIY'
-template_id = 'CFkShEZ9-j1Ifq9XgZ53B_2gLQLDxPgbU-r8G11yxEc'
+template_id = 'GMIJSjcDyaRoXsqTBQ-nGE3aVDAVnJmsPnXMWXvxLrE'
 
-obj = re.compile(
+obj1 = re.compile(
     r'"(?P<city>.*?)":"重庆","lastUpdateTime":".*?","date":".*?","weather":"(?P<weather>.*?)","temp":(?P<temp>.*?),"humidity":".*?","wind":".*?","pm25":.*?,"pm10":.*?,"low":(?P<low>.*?),"high":(?P<high>.*?),"airData":".*?","airQuality":"(?P<airQuality>.*?)","dateLong":.*?,"weatherType":.*?,"windLevel":.*?,"province":"重庆"')
+obj2 = re.compile(r'"name":"新增本土","data":\[.*,(?P<local_number>.*?)\]}\],"updateDate"')
 
 
 def get_weather():
     url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
     resp = requests.get(url, headers=headers)
     resp.close()
-    result1 = obj.finditer(resp.text)
+    result1 = obj1.finditer(resp.text)
     for i in result1:
         weather = i.group('weather')
         temp = i.group('temp')
@@ -33,6 +33,16 @@ def get_weather():
         low = i.group('low')
         airQuality = i.group('airQuality')
     return weather, temp, high, low, airQuality
+
+
+def get_local_number():
+    url = 'https://voice.baidu.com/newpneumonia/getv2?from=mola-virus&stage=publish&target=trendCity&area=重庆-沙坪坝区'
+    resp = requests.get(url, headers=headers)
+    resp.close()
+    result2 = obj2.finditer(resp.text)
+    for i in result2:
+        local_number = i.group('local_number')
+    return local_number
 
 
 def get_words():
@@ -50,7 +60,9 @@ client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 weather, temp, high, low, airQuality = get_weather()
-data = {"weather": {"value": weather, "color": get_random_color()},
+local_number = get_local_number()
+data = {"local_number": {"value": local_number, "color": get_random_color()},
+        "weather": {"value": weather, "color": get_random_color()},
         "temp": {"value": temp, "color": get_random_color()},
         "airQuality": {"value": airQuality, "color": get_random_color()},
         "words": {"value": get_words(), "color": get_random_color()},
