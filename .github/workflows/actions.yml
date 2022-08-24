@@ -1,13 +1,13 @@
 name: wechatpush
 on:
   schedule:
-  - cron:  '0 0 * * *'
+  - cron:  '0 21 * * *'
   workflow_dispatch:
 
 jobs:
   send_message:
     runs-on: ubuntu-latest
-    name: send morning to your girlfriend
+    name: push
 
     steps:
       - uses: actions/checkout@v3
