@@ -67,8 +67,10 @@ weather = weather1 + '转' + weather2
 temp = low + '~' + high
 local_number = get_local_number()
 words = get_words()
-data = {"local_number": {"value": local_number, "color": get_random_color()},
-        "weather": {"value": weather, "color": get_random_color()},
-        "temp": {"value": temp, "color": get_random_color()},
-        "words": {"value": words, "color": get_random_color()},
+data = {
+    "local_number": {"value": local_number, "color": get_random_color()},
+    "weather": {"value": weather, "color": get_random_color()},
+    "temp": {"value": temp, "color": get_random_color()},
+    "words": {"value": words, "color": get_random_color()}
+}
 res = wm.send_template(user_id, template_id, data)
