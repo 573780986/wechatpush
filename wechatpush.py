@@ -3,6 +3,7 @@ from wechatpy import WeChatClient
 from wechatpy.client.api import WeChatMessage, WeChatTemplate
 import requests
 import random
+import os
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36 Edg/103.0.1264.77"
@@ -10,11 +11,11 @@ headers = {
 
 city = '重庆'
 
-app_id = 'wx892de2a69a031f02'
-app_secret = '3b372768c55f6093b5366181e6abcf89'
+app_id = os.environ["APP_ID"]
+app_secret = os.environ["APP_SECRET"]
 
-user_id = 'oBgGw6uckKo_zoqdYGD0BoN6jQIY'
-template_id = 'GMIJSjcDyaRoXsqTBQ-nGE3aVDAVnJmsPnXMWXvxLrE'
+user_id = os.environ["USER_ID"]
+template_id = os.environ["TEMPLATE_ID"]
 
 obj1 = re.compile(
     r'"(?P<city>.*?)":"重庆","lastUpdateTime":".*?","date":".*?","weather":"(?P<weather>.*?)","temp":(?P<temp>.*?),"humidity":".*?","wind":".*?","pm25":.*?,"pm10":.*?,"low":(?P<low>.*?),"high":(?P<high>.*?),"airData":".*?","airQuality":"(?P<airQuality>.*?)","dateLong":.*?,"weatherType":.*?,"windLevel":.*?,"province":"重庆"')
