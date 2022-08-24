@@ -20,6 +20,7 @@ template_id = os.environ["TEMPLATE_ID"]
 obj1 = re.compile(
     r'"(?P<city>.*?)":"重庆","lastUpdateTime":".*?","date":".*?","weather":"(?P<weather>.*?)","temp":(?P<temp>.*?),"humidity":".*?","wind":".*?","pm25":.*?,"pm10":.*?,"low":(?P<low>.*?),"high":(?P<high>.*?),"airData":".*?","airQuality":"(?P<airQuality>.*?)","dateLong":.*?,"weatherType":.*?,"windLevel":.*?,"province":"重庆"')
 obj2 = re.compile(r'"name":"新增本土","data":\[.*,(?P<local_number>.*?)\]}\],"updateDate"')
+obj3 = re.compile(r'"data":"(?P<data>.*?)"')
 
 
 def get_weather():
@@ -47,10 +48,14 @@ def get_local_number():
 
 
 def get_words():
-    words = requests.get("https://api.shadiao.pro/chp")
-    if words.status_code != 200:
-        return get_words()
-    return words.json()['data']['text']
+    url = 'https://www.iamwawa.cn/home/lizhi/ajax'
+    resp = requests.get(url, headers=headers)
+    resp.close()
+    resp = resp.text.encode('utf-8').decode('unicode-escape')
+    result = obj3.finditer(resp)
+    for i in result:
+        words = i.group('data')
+    return words
 
 
 def get_random_color():
@@ -62,11 +67,12 @@ client = WeChatClient(app_id, app_secret)
 wm = WeChatMessage(client)
 weather, temp, high, low, airQuality = get_weather()
 local_number = get_local_number()
+words = get_words()
 data = {"local_number": {"value": local_number, "color": get_random_color()},
         "weather": {"value": weather, "color": get_random_color()},
         "temp": {"value": temp, "color": get_random_color()},
         "airQuality": {"value": airQuality, "color": get_random_color()},
-        "words": {"value": get_words(), "color": get_random_color()},
+        "words": {"value": words, "color": get_random_color()},
         "high": {"value": high, "color": get_random_color()},
         "low": {"value": low, "color": get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
