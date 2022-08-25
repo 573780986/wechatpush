@@ -15,7 +15,7 @@ app_secret = os.environ["APP_SECRET"]
 user_id = os.environ["USER_ID"]
 template_id = os.environ["TEMPLATE_ID"]
 
-obj1 = re.compile(r'<div class="day-item dayicon">.*?</div>.*?<div class="day-item">(?P<day_item1>.*?)</div>.*?<div class="day-item">.*?</div>.*?<div class="day-item">.*?</div>.*?<div class="day-item bardiv">.*?<div class="bar" style="top:0px; bottom:0px;">.*?<div class="high">(?P<high>.*?)</div>.*?<div class="low">.*?(?P<low>.*?)</div>.*?</div>.*?</div>.*?<div class="day-item nighticon">.*?</div>.*?<div class="day-item">(?P<day_item2>.*?)</div>',re.S)
+obj1 = re.compile(r'<div class="pull-left day actived">.*?<div class="day-item">.*?<br/>.*?</div>.*?<div class="day-item dayicon"><img src=".*?"/></div>.*?<div class="day-item">(?P<day_item1>.*?)</div>.*?<div class="day-item">.*?</div>.*?<div class="day-item">.*?</div>.*?<div class="day-item bardiv"><div class="bar" style="top:1px; bottom:0px;"><div class="high">(?P<high>.*?)</div><div class="low">(?P<low>.*?)</div></div></div>.*?<div class="day-item nighticon"><img src=".*?"/></div>.*?<div class="day-item">(?P<day_item2>.*?)</div>.*?<div class="day-item">.*?</div>.*?<div class="day-item">.*?</div>', re.S)
 obj2 = re.compile(r'"name":"新增本土","data":\[.*,(?P<local_number>.*?)\]}\],"updateDate"')
 obj3 = re.compile(r'"data":"(?P<data>.*?)"')
 
@@ -63,7 +63,10 @@ client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 weather1, weather2, high, low = get_weather()
-weather = weather1 + '转' + weather2
+if weather1 == weather2:
+    weather = weather1
+else:
+    weather = weather1 + '转' + weather2
 temp = low + '~' + high
 local_number = get_local_number()
 words = get_words()
