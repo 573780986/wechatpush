@@ -10,7 +10,7 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36 Edg/103.0.1264.77"
 }
 
-now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
+now = time.strftime("%Y年%m月%d日%H时%M分%S秒", time.localtime(time.time() + 28800000))
 
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
