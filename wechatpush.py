@@ -4,10 +4,13 @@ from wechatpy.client.api import WeChatMessage, WeChatTemplate
 import requests
 import random
 import os
+import time
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36 Edg/103.0.1264.77"
 }
+
+now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
 
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
@@ -70,7 +73,9 @@ else:
 temp = low + '~' + high
 local_number = get_local_number()
 words = get_words()
+runtime = now
 data = {
+    "runtime": {"value": runtime, "color": get_random_color()},
     "local_number": {"value": local_number, "color": get_random_color()},
     "weather": {"value": weather, "color": get_random_color()},
     "temp": {"value": temp, "color": get_random_color()},
