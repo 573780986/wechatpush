@@ -1,7 +1,7 @@
 name: wechatpush
 on:
   schedule:
-  - cron:  '30 23 * * *'
+  - cron:  '49 23 * * *'
   workflow_dispatch:
 
 jobs:
